@@ -7,11 +7,16 @@
     apt_key:
       url:  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
       state: present
-  
+
   - name: Add Jenkins repository on ubuntu server
     apt_repository:
       repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
       state: present
+
+  - name: update ubuntu repo and cache
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
 
   - name: Install java for jenkins on ubuntu because jenkins is written in java
     apt:
@@ -24,11 +29,11 @@
       state: present
 
   - name: After, Installtion start Jenkins server.
-    apt:
+    service:
       name: jenkins
       state: started
-    
+
   - name: Enable jenkins server. So, whenever Jenkins server is rebooted then Jenkins service is start on boot time.
-    apt:
+    service:
       name: jenkins
-      enables: yes
+      enabled: yes
